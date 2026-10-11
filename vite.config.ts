@@ -1,0 +1,45 @@
+import vue from "@vitejs/plugin-vue";
+import path from "path";
+import type { UserConfig } from "vite";
+import { defineConfig } from "vite";
+import cssInjectedByJsPlugin from "vite-plugin-css-injected-by-js";
+
+import packageDefinition from "./package.json" with { type: "json" };
+
+export default defineConfig(() => {
+    const config: UserConfig = {
+        build: {
+            lib: {
+                name: packageDefinition.name,
+                entry: {
+                    index: "src/index.ts",
+                    server: "src/server.ts"
+                },
+                formats: ["es"]
+            },
+            rolldownOptions: {
+                external: [...Object.keys(packageDefinition.peerDependencies || {}), /^node:/]
+            }
+        },
+        plugins: [
+            vue(),
+            cssInjectedByJsPlugin({ jsAssetsFilterFunction: (chunk) => chunk.fileName === "index.js" })
+        ],
+        preview: {
+            allowedHosts: [
+                "localhost",
+                "127.0.0.1",
+                "https://luna-park.app"
+            ],
+            host: "127.0.0.1",
+            port: 2084
+        },
+        resolve: {
+            alias: {
+                "@": path.resolve(import.meta.dirname, "src")
+            }
+        }
+    };
+
+    return config;
+});
