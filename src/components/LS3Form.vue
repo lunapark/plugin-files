@@ -1,6 +1,6 @@
 <template>
     <div class="s3-form">
-        <div class="row">
+        <div class="fields">
             <LInput
                 v-model="settings.endpoint"
                 label="Endpoint"
@@ -11,8 +11,6 @@
                 label="Region"
                 placeholder="auto"
             />
-        </div>
-        <div class="row">
             <LInput
                 v-model="settings.bucket"
                 label="Bucket"
@@ -23,8 +21,6 @@
                 label="Key prefix"
                 placeholder="files/"
             />
-        </div>
-        <div class="row">
             <LInput
                 v-model="settings.accessKeyId"
                 label="Access key ID"
@@ -36,15 +32,20 @@
                 type="password"
             />
         </div>
-        <label class="checkbox">
-            <LCheckbox v-model="settings.pathStyle" />
-            Path-style URLs (needed by MinIO and most S3-compatible providers)
-        </label>
+        <LSettingRow
+            description="Needed by MinIO and most S3-compatible providers."
+            title="Path-style URLs"
+        >
+            <LSwitch
+                v-model="settings.pathStyle"
+                small
+            />
+        </LSettingRow>
     </div>
 </template>
 
 <script setup lang="ts">
-import { LCheckbox, LInput } from "@luna-park/design";
+import { LInput, LSettingRow, LSwitch } from "@luna-park/design";
 
 import type { TS3Settings } from "@/storage/s3.ts";
 
@@ -55,25 +56,14 @@ defineProps<{
 
 <style scoped>
 .s3-form {
-    display: flex;
-    flex-direction: column;
-    gap: var(--length-xs);
+    border-top: 1px solid var(--color-background-2);
 
-    .row {
-        display: flex;
-        gap: var(--length-xs);
-
-        &:deep(.input) {
-            flex: 1 1 0;
-        }
-    }
-
-    .checkbox {
-        display: flex;
-        align-items: center;
-        gap: var(--length-xs);
-        font-size: var(--font-size-s);
-        color: var(--color-content-lite);
+    .fields {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: var(--length-s);
+        padding: var(--length-s);
+        border-bottom: 1px solid var(--color-background-2);
     }
 }
 </style>

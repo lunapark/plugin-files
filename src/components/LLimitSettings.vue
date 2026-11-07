@@ -1,58 +1,76 @@
 <template>
-    <div class="limit-settings">
-        <h2>Limits per role</h2>
-        <span class="description">
-            Limits apply to the connected user when a file is saved. A user with several roles gets the most generous limit of each kind. Leave a field empty for no limit.
-            Uploads are also capped by the server's <code>UPLOAD_MAX_SIZE</code> (10 MB by default).
-        </span>
-        <div class="grid">
-            <span class="header">Role</span>
-            <span class="header">Files</span>
-            <span class="header">File size (MB)</span>
-            <span class="header">Total size (MB)</span>
-            <span class="header">Custom</span>
-
-            <span class="role">Default</span>
-            <LLimitInput v-model="internals.quotas.default.maxFiles" />
-            <LLimitInput v-model="internals.quotas.default.maxFileSize" />
-            <LLimitInput v-model="internals.quotas.default.maxTotalSize" />
-            <span />
-
-            <template
-                v-for="role in roles"
-                :key="role.id"
-            >
-                <span class="role">{{ role.label }}</span>
-                <template v-if="internals.quotas.roles[role.id]">
-                    <LLimitInput v-model="internals.quotas.roles[role.id]!.maxFiles" />
-                    <LLimitInput v-model="internals.quotas.roles[role.id]!.maxFileSize" />
-                    <LLimitInput v-model="internals.quotas.roles[role.id]!.maxTotalSize" />
-                </template>
-                <template v-else>
-                    <LLimitInput
-                        v-model="internals.quotas.default.maxFiles"
-                        disabled
-                    />
-                    <LLimitInput
-                        v-model="internals.quotas.default.maxFileSize"
-                        disabled
-                    />
-                    <LLimitInput
-                        v-model="internals.quotas.default.maxTotalSize"
-                        disabled
-                    />
-                </template>
-                <LCheckbox
-                    :model-value="!!internals.quotas.roles[role.id]"
-                    @update:model-value="setCustom(role.id, $event)"
-                />
-            </template>
-        </div>
-    </div>
+    <LCard class="limit-settings">
+        <table>
+            <thead>
+                <tr>
+                    <th class="role">
+                        Role
+                    </th>
+                    <th>Files</th>
+                    <th>File size (MB)</th>
+                    <th>Total size (MB)</th>
+                    <th class="custom">
+                        Custom
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th class="role">
+                        Default
+                    </th>
+                    <td><LLimitInput v-model="internals.quotas.default.maxFiles" /></td>
+                    <td><LLimitInput v-model="internals.quotas.default.maxFileSize" /></td>
+                    <td><LLimitInput v-model="internals.quotas.default.maxTotalSize" /></td>
+                    <td />
+                </tr>
+                <tr
+                    v-for="role in roles"
+                    :key="role.id"
+                >
+                    <th class="role">
+                        {{ role.label }}
+                    </th>
+                    <template v-if="internals.quotas.roles[role.id]">
+                        <td><LLimitInput v-model="internals.quotas.roles[role.id]!.maxFiles" /></td>
+                        <td><LLimitInput v-model="internals.quotas.roles[role.id]!.maxFileSize" /></td>
+                        <td><LLimitInput v-model="internals.quotas.roles[role.id]!.maxTotalSize" /></td>
+                    </template>
+                    <template v-else>
+                        <td>
+                            <LLimitInput
+                                v-model="internals.quotas.default.maxFiles"
+                                disabled
+                            />
+                        </td>
+                        <td>
+                            <LLimitInput
+                                v-model="internals.quotas.default.maxFileSize"
+                                disabled
+                            />
+                        </td>
+                        <td>
+                            <LLimitInput
+                                v-model="internals.quotas.default.maxTotalSize"
+                                disabled
+                            />
+                        </td>
+                    </template>
+                    <td class="custom">
+                        <LCheckbox
+                            class="checkbox"
+                            :model-value="!!internals.quotas.roles[role.id]"
+                            @update:model-value="setCustom(role.id, $event)"
+                        />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </LCard>
 </template>
 
 <script setup lang="ts">
-import { LCheckbox } from "@luna-park/design";
+import { LCard, LCheckbox } from "@luna-park/design";
 import { computed } from "vue";
 
 import LLimitInput from "@/components/LLimitInput.vue";
@@ -73,39 +91,51 @@ function setCustom(roleId: string, custom: boolean) {
 
 <style scoped>
 .limit-settings {
-    padding: var(--length-s);
-    display: flex;
-    flex-direction: column;
-    gap: var(--length-xs);
+    overflow-x: auto;
 
-    h2 {
-        font-size: var(--font-size-xs);
-        text-transform: uppercase;
-        font-weight: 600;
-        color: var(--color-content-liter);
-        margin: 0;
+    table {
+        width: 100%;
+        border-collapse: collapse;
     }
 
-    .description {
-        color: var(--color-content-litest);
+    th,
+    td {
+        padding: var(--length-xxs) var(--length-xs);
+        border-bottom: 1px solid var(--color-background-2);
         font-size: var(--font-size-s);
+        font-weight: normal;
+        text-align: left;
     }
 
-    .grid {
-        display: grid;
-        grid-template-columns: 1fr repeat(3, 8rem) auto;
-        align-items: center;
-        gap: var(--length-xs);
+    tbody tr:last-child th,
+    tbody tr:last-child td {
+        border-bottom: none;
     }
 
-    .header {
+    thead th {
         font-size: var(--font-size-xs);
         color: var(--color-content-liter);
+    }
+
+    td {
+        width: 8rem;
+        min-width: 6rem;
     }
 
     .role {
-        font-size: var(--font-size-s);
-        color: var(--color-content-lite);
+        padding-left: var(--length-s);
+        color: var(--color-content);
+    }
+
+    .custom {
+        width: 1%;
+        padding-right: var(--length-s);
+        text-align: center;
+        white-space: nowrap;
+
+        .checkbox {
+            margin-inline: auto;
+        }
     }
 }
 </style>

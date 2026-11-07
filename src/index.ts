@@ -1,6 +1,5 @@
 import { faGauge, faHardDrive } from "@fortawesome/free-solid-svg-icons";
 import { makePlugin } from "@luna-park/plugin";
-import { shallowRef } from "vue";
 
 import { backImports, getEnv, getInjections } from "@/build.ts";
 import LLimitSettings from "@/components/LLimitSettings.vue";
@@ -25,18 +24,6 @@ export default makePlugin({
     icon,
     llm,
     internals,
-    settings: [
-        {
-            component: shallowRef(LStorageSettings),
-            icon: faHardDrive,
-            label: "Storage"
-        },
-        {
-            component: shallowRef(LLimitSettings),
-            icon: faGauge,
-            label: "Limits"
-        }
-    ],
     lifecycle: {
         mount: async ({ addFile, app, backend, getFile, getPlugin, host }) => {
             Object.assign(env, { addFile, app, backend, getFile, host });
@@ -69,5 +56,23 @@ export default makePlugin({
     },
     dependencies: [
         { id: usersPluginId, name: "Users", target: "@luna-park/plugin-users" }
-    ]
+    ],
+    workspace: {
+        sections: [
+            {
+                id: "storage",
+                component: LStorageSettings,
+                description: "Where files are stored in the editor and in your deployed app.",
+                icon: faHardDrive,
+                title: "Storage"
+            },
+            {
+                id: "limits",
+                component: LLimitSettings,
+                description: "Per-role limits checked when a file is saved. A user with several roles gets the most generous limit of each kind. Leave a field empty for no limit. Uploads are also capped by the server's UPLOAD_MAX_SIZE (10 MB by default).",
+                icon: faGauge,
+                title: "Limits"
+            }
+        ]
+    }
 });
