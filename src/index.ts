@@ -58,6 +58,7 @@ export default makePlugin({
         { id: usersPluginId, name: "Users", target: "@luna-park/plugin-users" }
     ],
     workspace: {
+        openOnClick: true,
         sections: [
             {
                 id: "storage",
