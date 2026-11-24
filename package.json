@@ -1,6 +1,6 @@
 {
     "name": "@luna-park/plugin-files",
-    "version": "1.2.0",
+    "version": "1.3.0",
     "private": false,
     "description": "Files plugin for Luna Park: store files uploaded by your users.",
     "keywords": [
@@ -51,7 +51,7 @@
     "devDependencies": {
         "@luna-park/design": "^1.7.0",
         "@luna-park/eslint-config": "^1.4.5",
-        "@luna-park/plugin": "^2.1.0",
+        "@luna-park/plugin": "^2.5.0",
         "@types/node": "^26.6.6",
         "@vitejs/plugin-vue": "^6.0.10",
         "@vue/tsconfig": "^0.9.1",

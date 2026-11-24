@@ -1,27 +1,30 @@
 import type { TEnv } from "@luna-park/plugin";
-import { EInjectionKey } from "@luna-park/plugin";
+import { EInjectionKey, getPluginSecretEnvName } from "@luna-park/plugin";
 
+import type { TConfig } from "@/config.ts";
+import { secretNames } from "@/config.ts";
+import { pluginId } from "@/env.ts";
 import type { TInternals } from "@/internals.ts";
 import { EProductionStorage } from "@/internals.ts";
+import { getLegacySecretEnv } from "@/migrations/secrets.ts";
 import { serverTarget } from "@/nodes/index.ts";
 
 import packageDefinition from "../package.json" with { type: "json" };
 
 const envKeys = {
     diskFolder: "FILES_DISK_FOLDER",
-    publicUrl: "FILES_PUBLIC_URL",
-    s3Secret: "FILES_S3_SECRET_ACCESS_KEY"
+    publicUrl: "FILES_PUBLIC_URL"
 };
 
 export const backImports = [{ name: packageDefinition.name, version: packageDefinition.version }];
 
-export function getEnv({ internals }: TEnv<never, TInternals>) {
-    const { production } = internals;
+export function getEnv(env: TEnv<TConfig, TInternals>) {
+    const { production } = env.internals;
 
     return {
         [envKeys.publicUrl]: "",
         ...(production.storage === EProductionStorage.Disk ? { [envKeys.diskFolder]: production.disk.folder } : {}),
-        ...(production.storage === EProductionStorage.S3 ? { [envKeys.s3Secret]: production.s3.secretAccessKey } : {})
+        ...getLegacySecretEnv(env)
     };
 }
 
@@ -35,7 +38,7 @@ function getStorageCode({ production }: TInternals) {
         case EProductionStorage.S3:
             return {
                 name: "createS3Storage",
-                code: `filesCreateS3Storage({ ...${ JSON.stringify({ ...production.s3, secretAccessKey: "" }) }, secretAccessKey: process.env.${ envKeys.s3Secret } })`
+                code: `filesCreateS3Storage({ ...${ JSON.stringify({ ...production.s3, secretAccessKey: "" }) }, secretAccessKey: process.env[${ JSON.stringify(getPluginSecretEnvName(pluginId, secretNames.s3Secret)) }] })`
             };
         default:
             return {
@@ -45,7 +48,7 @@ function getStorageCode({ production }: TInternals) {
     }
 }
 
-export function getInjections({ internals }: TEnv<never, TInternals>) {
+export function getInjections({ internals }: TEnv<TConfig, TInternals>) {
     const storage = getStorageCode(internals);
 
     // language=JavaScript

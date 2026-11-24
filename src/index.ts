@@ -4,12 +4,14 @@ import { makePlugin } from "@luna-park/plugin";
 import { backImports, getEnv, getInjections } from "@/build.ts";
 import LLimitSettings from "@/components/LLimitSettings.vue";
 import LStorageSettings from "@/components/LStorageSettings.vue";
+import { config } from "@/config.ts";
 import { configureEditorRuntime } from "@/editor/runtime.ts";
-import { env } from "@/env.ts";
+import { env, pluginId } from "@/env.ts";
 import { initFilesDatabase } from "@/files/database.ts";
 import { internals } from "@/internals.ts";
 import llm from "@/llm.md?raw";
 import icon from "@/logo.svg";
+import { migrateSecrets } from "@/migrations/secrets.ts";
 import { nodes } from "@/nodes/index.ts";
 import { deleteUserFiles } from "@/runtime/files.ts";
 import type { TUsersApi } from "@/users.ts";
@@ -18,17 +20,19 @@ import { usersApi, usersPluginId } from "@/users.ts";
 let stopUserDelete: (() => void) | undefined;
 
 export default makePlugin({
-    id: "files",
+    id: pluginId,
     name: "Files",
     description: "Store files uploaded by your users.",
     icon,
     llm,
+    config,
     internals,
     lifecycle: {
-        mount: async ({ addFile, app, backend, getFile, getPlugin, host }) => {
-            Object.assign(env, { addFile, app, backend, getFile, host });
+        mount: async (pluginEnv) => {
+            Object.assign(env, pluginEnv);
+            await migrateSecrets(pluginEnv);
 
-            const users = await getPlugin<TUsersApi>(usersPluginId);
+            const users = await pluginEnv.getPlugin<TUsersApi>(usersPluginId);
 
             if (!users) {
                 throw new Error("The Files plugin needs the Users plugin. Install it from the plugin library.");

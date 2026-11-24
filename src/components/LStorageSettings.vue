@@ -24,6 +24,7 @@
             </LSettingRow>
             <LS3Form
                 v-if="internals.editor.storage === EEditorStorage.S3"
+                :secret-name="secretNames.editorS3Secret"
                 :settings="internals.editor.s3"
             />
             <p
@@ -36,7 +37,7 @@
 
         <LCard>
             <LSettingRow
-                description="Where your deployed app stores files. Secrets go to the project's .env, never to the generated code."
+                description="Where your deployed app stores files. Secrets are saved in the project's .env and stay out of the generated code."
                 title="Production"
             >
                 <LDropdown
@@ -64,6 +65,7 @@
             </LSettingRow>
             <LS3Form
                 v-if="internals.production.storage === EProductionStorage.S3"
+                :secret-name="secretNames.s3Secret"
                 :settings="internals.production.s3"
             />
         </LCard>
@@ -76,6 +78,7 @@ import { LCard, LDropdown, LInput, LSettingRow } from "@luna-park/design";
 import { computed } from "vue";
 
 import LS3Form from "@/components/LS3Form.vue";
+import { secretNames } from "@/config.ts";
 import { env } from "@/env.ts";
 import { EEditorStorage, EProductionStorage, internals } from "@/internals.ts";
 

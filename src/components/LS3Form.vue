@@ -25,11 +25,11 @@
                 v-model="settings.accessKeyId"
                 label="Access key ID"
             />
-            <LInput
-                v-model="settings.secretAccessKey"
+            <LSecretInput
                 label="Secret access key"
+                :name="secretName"
                 placeholder="********"
-                type="password"
+                :secrets="secrets"
             />
         </div>
         <LSettingRow
@@ -46,12 +46,18 @@
 
 <script setup lang="ts">
 import { LInput, LSettingRow, LSwitch } from "@luna-park/design";
+import { LSecretInput } from "@luna-park/plugin/components";
+import { computed } from "vue";
 
-import type { TS3Settings } from "@/storage/s3.ts";
+import { env } from "@/env.ts";
+import type { TS3SecretlessSettings } from "@/internals.ts";
 
 defineProps<{
-    settings: TS3Settings;
+    secretName: string;
+    settings: TS3SecretlessSettings;
 }>();
+
+const secrets = computed(() => env.secrets);
 </script>
 
 <style scoped>

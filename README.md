@@ -59,7 +59,7 @@ Uploads are also capped by the server before they reach your route, with `UPLOAD
 
 ## 📦 In your deployed backend
 
-- **Serving**: files are served at `GET /api/_files/:id`. Private files need a valid signature. Files that a browser could run (HTML, SVG…) are always downloaded, never displayed.
+- **Serving**: files are served at `GET /api/_files/:id`. Private files need a valid signature. Files that a browser could run (HTML, SVG…) are always downloaded instead of displayed.
 - **Configuration** in the project's `.env`:
 
 | Variable | Description |

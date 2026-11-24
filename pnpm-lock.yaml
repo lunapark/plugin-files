@@ -30,8 +30,8 @@ importers:
         specifier: ^1.4.5
         version: 1.4.5(c2f652b2b27344b3fa886187aa3e2d08)
       '@luna-park/plugin':
-        specifier: ^2.1.0
-        version: 2.1.0
+        specifier: ^2.5.0
+        version: 2.5.0(@luna-park/design@1.7.0(@floating-ui/vue@1.1.11(vue@3.5.45(typescript@6.0.3)))(@fortawesome/fontawesome-svg-core@7.3.1)(@fortawesome/free-solid-svg-icons@7.3.1)(@fortawesome/vue-fontawesome@3.3.3(@fortawesome/fontawesome-svg-core@7.3.1)(vue@3.5.45(typescript@6.0.3)))(@luna-park/utils@2.0.0(jsep@1.6.0))(@material/web@2.5.0)(@vueuse/core@14.4.0(vue@3.5.45(typescript@6.0.3)))(pinia@3.0.4(typescript@6.0.3)(vue@3.5.45(typescript@6.0.3)))(symbol-db@1.0.2)(synth-color@1.1.5)(uuid@13.0.2)(vue@3.5.45(typescript@6.0.3)))
       '@types/node':
         specifier: ^26.6.6
         version: 26.6.6
@@ -346,9 +346,14 @@ packages:
   '@luna-park/http-errors@1.0.0':
     resolution: {integrity: sha512-KITb2Ij2uUBPPVPmmo6UeWrCklYU1vx7TD1pUfgqjduK74eox7MjlGCpqv5i5Pul5l0053YNN5RN4oExrfqocQ==}
 
-  '@luna-park/plugin@2.1.0':
-    resolution: {integrity: sha512-9oMH4AWJ5gfAHi/IOgBQc909G9zBqiSXA6bIXc9/FsW/Vr9ole3lVCpG2+oMtTOk8YnNrfRjxijyTQt3WUUOTA==}
+  '@luna-park/plugin@2.5.0':
+    resolution: {integrity: sha512-7iLvJnal+KNuMBiA3bCVMVNc+0LGl72Whj8RRwxc40DvZRI6k53vmT29hDDr5ZWQ8osqsPMxt1XK8mSaEH8ZMw==}
     hasBin: true
+    peerDependencies:
+      '@luna-park/design': ^1.7.0
+    peerDependenciesMeta:
+      '@luna-park/design':
+        optional: true
 
   '@luna-park/utils@2.0.0':
     resolution: {integrity: sha512-0te7WINVaKANc64/6RtUIbkTbMTasKUTCvXQ7yigZWDDvMrxCXxoGVZ09B+YuwH6uGmxC2mtVi3GU3UyASWGrA==}
@@ -2226,7 +2231,7 @@ snapshots:
 
   '@luna-park/http-errors@1.0.0': {}
 
-  '@luna-park/plugin@2.1.0':
+  '@luna-park/plugin@2.5.0(@luna-park/design@1.7.0(@floating-ui/vue@1.1.11(vue@3.5.45(typescript@6.0.3)))(@fortawesome/fontawesome-svg-core@7.3.1)(@fortawesome/free-solid-svg-icons@7.3.1)(@fortawesome/vue-fontawesome@3.3.3(@fortawesome/fontawesome-svg-core@7.3.1)(vue@3.5.45(typescript@6.0.3)))(@luna-park/utils@2.0.0(jsep@1.6.0))(@material/web@2.5.0)(@vueuse/core@14.4.0(vue@3.5.45(typescript@6.0.3)))(pinia@3.0.4(typescript@6.0.3)(vue@3.5.45(typescript@6.0.3)))(symbol-db@1.0.2)(synth-color@1.1.5)(uuid@13.0.2)(vue@3.5.45(typescript@6.0.3)))':
     dependencies:
       '@electric-sql/pglite': 0.5.15
       '@fastify/cors': 11.3.1
@@ -2238,6 +2243,8 @@ snapshots:
       lite-cron: 1.1.0
       typescript: 6.0.3
       vue: 3.5.45(typescript@6.0.3)
+    optionalDependencies:
+      '@luna-park/design': 1.7.0(@floating-ui/vue@1.1.11(vue@3.5.45(typescript@6.0.3)))(@fortawesome/fontawesome-svg-core@7.3.1)(@fortawesome/free-solid-svg-icons@7.3.1)(@fortawesome/vue-fontawesome@3.3.3(@fortawesome/fontawesome-svg-core@7.3.1)(vue@3.5.45(typescript@6.0.3)))(@luna-park/utils@2.0.0(jsep@1.6.0))(@material/web@2.5.0)(@vueuse/core@14.4.0(vue@3.5.45(typescript@6.0.3)))(pinia@3.0.4(typescript@6.0.3)(vue@3.5.45(typescript@6.0.3)))(symbol-db@1.0.2)(synth-color@1.1.5)(uuid@13.0.2)(vue@3.5.45(typescript@6.0.3))
 
   '@luna-park/utils@2.0.0(jsep@1.6.0)':
     dependencies:

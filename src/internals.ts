@@ -20,30 +20,31 @@ export const EProductionStorage = {
 
 export type EProductionStorage = typeof EProductionStorage[keyof typeof EProductionStorage];
 
+export type TS3SecretlessSettings = Omit<TS3Settings, "secretAccessKey"> & { secretAccessKey?: string; };
+
 export type TInternals = {
     editor: {
         disk: { folder: string; };
-        s3: TS3Settings;
+        s3: TS3SecretlessSettings;
         storage: EEditorStorage;
     };
     files: Record<string, string>;
     production: {
         disk: { folder: string; };
-        s3: TS3Settings;
+        s3: TS3SecretlessSettings;
         storage: EProductionStorage;
     };
     quotas: TQuotas;
 };
 
-export function getDefaultS3Settings(): TS3Settings {
+export function getDefaultS3Settings(): TS3SecretlessSettings {
     return {
         accessKeyId: "",
         bucket: "",
         endpoint: "",
         pathStyle: true,
         prefix: "",
-        region: "auto",
-        secretAccessKey: ""
+        region: "auto"
     };
 }
 

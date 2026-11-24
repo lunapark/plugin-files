@@ -1,3 +1,4 @@
+import { secretNames } from "@/config.ts";
 import { database, env } from "@/env.ts";
 import { EEditorStorage, internals } from "@/internals.ts";
 import type { TFileRecord } from "@/runtime/config.ts";
@@ -47,7 +48,7 @@ export function getEditorStorage(): TStorage {
             if (!host) {
                 throw new Error("S3 storage is only available in the desktop app. Change the editor storage in the Files settings.");
             }
-            return createS3Storage(internals.editor.s3, host.fetch);
+            return createS3Storage({ ...internals.editor.s3, secretAccessKey: env.secrets?.values[secretNames.editorS3Secret] ?? "" }, host.fetch);
         default:
             return createOpfsStorage((env.app.tree as { id?: string; }).id ?? env.app.name);
     }
